@@ -154,6 +154,8 @@ class ScrollPicker extends HTMLElement {
     this.touchStart = this.touchStart.bind(this);
     this.touchMove = this.touchMove.bind(this);
     this.touchEnd = this.touchEnd.bind(this);
+
+    this.isOverlayStopCancel = false;
     this.startY = 0;
     this.originalY = 0;
     this.isMoving = false;
@@ -164,9 +166,11 @@ class ScrollPicker extends HTMLElement {
 
     this._shadowRoot = this.attachShadow({ mode: "open" });
     this._shadowRoot.appendChild(containerTemplate.content.cloneNode(true));
-
     this.picker = this.generatePicker();
+  }
 
+  connectedCallback() {
+    console.log("connected");
     this.bindEvents();
     this.attachStyle();
   }
@@ -187,16 +191,16 @@ class ScrollPicker extends HTMLElement {
     this.picker.classList.remove("scroll-picker-show");
   }
 
-  connectedCallback() {
-    console.log("connected");
-  }
-
   static get observedAttributes() {
-    return ["title", "colums", "options"];
+    return ["title", "colums", "options", "stopoverlaycancel"];
   }
 
   set title(value) {
     this.setTitle(value);
+  }
+
+  set stopoverlaycancel(value) {
+    this.isOverlayStopCancel = Boolean(value);
   }
 
   set options(value) {
@@ -229,6 +233,9 @@ class ScrollPicker extends HTMLElement {
         this.columData = colum;
         this.setTitle(title);
         thhis.render(colum);
+        break;
+      case "stopoverlaycancel":
+        this.isOverlayStopCancel = Boolean(JSON.parse(newVal));
         break;
 
       default:
@@ -426,6 +433,8 @@ class ScrollPicker extends HTMLElement {
       });
 
     this.picker.addEventListener("click", () => {
+      if (this.isOverlayStopCancel) return;
+
       this.hide();
     });
   }
