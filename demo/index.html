@@ -1,73 +1,73 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Scroll Picker Demo</title>
-    <script src="../src/scroll-picker.js" defer></script>
-    <meta charset="utf-8" />
-    <base href="/" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"
-    />
-  </head>
-  <body>
-    <h1>Scroll Picker Demo</h1>
-    <scroll-picker id="test1" title="ceshji">
-      <button>Click</button>
-    </scroll-picker>
-    <scroll-picker id="test2" title="demo" stopoverlaycancel="true">
-      <button>Click2</button>
-    </scroll-picker>
 
-    <button id="remove">remove</button>
+<head>
+  <meta charset="utf-8" />
+  <title>Scroll Picker Demo</title>
+  <script src="../src/scroll-picker/scroll-picker.js" defer></script>
+  <meta charset="utf-8" />
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+</head>
 
-    <script>
-  document.querySelector('#remove').addEventListener('click', () => {
-    document.querySelector("#test2").destory();
-  })
+<body>
+  <h1>Scroll Picker Demo</h1>
+  <scroll-picker id="test1" title="ceshji">
+    <button>Click</button>
+  </scroll-picker>
+  <scroll-picker id="test2" title="demo" stopoverlaycancel="true">
+    <button>Click2</button>
+  </scroll-picker>
 
-      document
-        .querySelector("#test2")
-        .addEventListener("change", (value) => console.log(value));
-      console.log(document.querySelector("#test2"));
-      const ele = document.querySelector("#test2");
-      setTimeout(() => {
-        ele.colums = [
-          [
-            { id: "1", value: "1111" },
-            { id: "2", value: "2222" },
-            { id: "2", value: "2222" },
-            { id: "2", value: "2222" },
-            { id: "2", value: "2222" },
-            { id: "2", value: "2222" },
-            { id: "2", value: "2222" },
-            { id: "2", value: "2222" },
-          ],
-          [
-            { id: "3", value: "33333" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-          ],
-          [
-            { id: "3", value: "33333" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-            { id: "4", value: "4444" },
-          ],
-        ];
-      }, 2000);
-    </script>
-  </body>
+  <button id="remove">remove</button>
+
+  <script>
+    document.querySelector('#remove').addEventListener('click', () => {
+      document.querySelector("#test2").destory();
+    })
+
+    document
+      .querySelector("#test2")
+      .addEventListener("change", (value) => console.log(value));
+    console.log(document.querySelector("#test2"));
+    const ele = document.querySelector("#test2");
+    setTimeout(() => {
+      ele.colums = [
+        [
+          { id: "1", value: "1111" },
+          { id: "2", value: "2222" },
+          { id: "2", value: "2222" },
+          { id: "2", value: "2222" },
+          { id: "2", value: "2222" },
+          { id: "2", value: "2222" },
+          { id: "2", value: "2222" },
+          { id: "2", value: "2222" },
+        ],
+        [
+          { id: "3", value: "33333" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+        ],
+        [
+          { id: "3", value: "33333" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+          { id: "4", value: "4444" },
+        ],
+      ];
+    }, 2000);
+  </script>
+</body>
+
 </html>
