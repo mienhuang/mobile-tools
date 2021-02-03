@@ -1,4 +1,8 @@
 const containerTemplate = document.createElement("template");
+const PANEL_HEIGHT = 300;
+const YELLOW = '#FFDF22';
+const DARK_GRAY = '#2D343D';
+const GRAY = '#99A6B5';
 
 containerTemplate.innerHTML = `
   <style>
@@ -33,7 +37,7 @@ styleTemplate.innerHTML = `
         left: 0;
         bottom: 0;
         right: 0;
-        background-color: rgba(0,0,0,0.6);
+        background-color: rgba(45, 52, 61, .9);
         visibility: hidden;
     }
     .scroll-picker-show {
@@ -41,12 +45,12 @@ styleTemplate.innerHTML = `
     }
 
     .scroll-picker-panel {
-        height: 300px;
+        height: ${PANEL_HEIGHT}px;
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: #444;
+        background-color: ${DARK_GRAY};
         display: flex;
         flex-direction: column;
     }
@@ -57,19 +61,25 @@ styleTemplate.innerHTML = `
         justify-content: space-between;
         height: 40px;
         padding: 0 10px;
-        border-bottom: 1px solid #fff;
+        border-bottom: 1px solid ${GRAY};
     }
 
     .scroll-picker-title {
       line-height: 40px;
+      color: ${GRAY};
+      font-size: 18px;
     }
 
     .scroll-picker-btn{
         outline: none;
-        font-size: 20px;
-        color: #fff;
+        font-size: 16px;
+        color: ${GRAY};
         border: none;
         background: transparent;
+    }
+
+    .scroll-picker-confirm-btn {
+      color: ${YELLOW};
     }
 
     .scroll-picker-panel-content {
@@ -105,7 +115,7 @@ styleTemplate.innerHTML = `
       right: 0;
       bottom: 0;
       margin: auto;
-      border: 1px solid #fff;
+      border: 1px solid ${YELLOW};
     }
 
     .scroll-picker-mask {
@@ -113,15 +123,10 @@ styleTemplate.innerHTML = `
       position: absolute;
       top: 0;
       width: 100%;
-      height: 300px;
+      height: ${PANEL_HEIGHT}px;
       opacity: .9;
       pointer-events: none;
-      background: linear-gradient(rgb(45, 52, 61), rgba(255, 255, 255, 0), rgb(45, 52, 61));
-    }
-
-    .scroll-picker-title {
-      color: #fff;
-      font-size: 20px;
+      background: linear-gradient(rgb(45, 52, 61, .9), rgba(45, 52, 61, 0), rgb(45, 52, 61, .9));
     }
  
   </style>
@@ -387,6 +392,7 @@ class ScrollPicker extends HTMLElement {
     }
 
     const closeIndex = Math.round((90 - currentPostion) / 40);
+    console.log(closeIndex, 'closeIndex', this.columData[index])
 
     this.movePosition(colum, 90 - closeIndex * 40);
     this.value[index] = {
