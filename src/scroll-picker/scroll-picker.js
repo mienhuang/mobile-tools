@@ -3,6 +3,17 @@ const PANEL_HEIGHT = 300;
 const YELLOW = '#FFDF22';
 const DARK_GRAY = '#2D343D';
 const GRAY = '#99A6B5';
+const WHITE = '#fff';
+
+const DEFAULT_DARK_COLOR = {
+  containerBackground: 'rgba(45, 52, 61, .9)',
+  panelBackground: DARK_GRAY,
+  panelHeaderBorder: GRAY,
+  titleColor: GRAY,
+  confirmButtonColor: YELLOW,
+  cancelButtonColor: GRAY,
+  textColor: WHITE
+};
 
 containerTemplate.innerHTML = `
   <style>
@@ -37,9 +48,9 @@ styleTemplate.innerHTML = `
         left: 0;
         bottom: 0;
         right: 0;
-        background-color: rgba(45, 52, 61, .9);
         visibility: hidden;
     }
+
     .scroll-picker-show {
         visibility: visible !important;
     }
@@ -50,7 +61,6 @@ styleTemplate.innerHTML = `
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: ${DARK_GRAY};
         display: flex;
         flex-direction: column;
     }
@@ -61,31 +71,41 @@ styleTemplate.innerHTML = `
         justify-content: space-between;
         height: 40px;
         padding: 0 10px;
-        border-bottom: 1px solid ${GRAY};
+        border-bottom: 1px solid ${GRAY}; //
     }
 
     .scroll-picker-title {
       line-height: 40px;
-      color: ${GRAY};
       font-size: 18px;
+    }
+
+    .scroll-picker-title-dark {
+      color: ${GRAY};
+    }
+
+    .scroll-picker-title-light {
+      color: ${GRAY};
     }
 
     .scroll-picker-btn{
         outline: none;
         font-size: 16px;
-        color: ${GRAY};
         border: none;
         background: transparent;
     }
 
+    .scroll-picker-cancel-btn {
+      color: ${GRAY}; //
+    }
+
     .scroll-picker-confirm-btn {
-      color: ${YELLOW};
+      color: ${YELLOW}; //
     }
 
     .scroll-picker-panel-content {
         flex: 1;
         display: flex;
-        color: rgb(255, 255, 255);
+        color: rgb(255, 255, 255); //
         background-color: transparent;
         overflow: hidden;
         z-index: 2;
@@ -134,11 +154,11 @@ styleTemplate.innerHTML = `
 
 const pickerTemplate = document.createElement("template");
 pickerTemplate.innerHTML = `
-  <div class="scroll-picker-container">
-    <div class="scroll-picker-panel">
+  <div class="scroll-picker-container scroll-picker-container-dark">
+    <div class="scroll-picker-panel scroll-picker-panel-drak">
         <div class="scroll-picker-panel-header">
             <button class="scroll-picker-btn scroll-picker-cancel-btn">Cancel</button>
-            <div class="scroll-picker-title"></div>
+            <div class="scroll-picker-title scroll-picker-title-dark"></div>
             <button class="scroll-picker-btn scroll-picker-confirm-btn">Confirm</button>
         </div>
         <div class="scroll-picker-panel-content">
@@ -358,6 +378,7 @@ class ScrollPicker extends HTMLElement {
       const offset = event.target.targetOffset;
       const index = event.target.index;
       const columIndex = event.target.columIndex;
+      if (!Boolean(offset) || !Boolean(index > -1) || !Boolean(columIndex)) return;
 
       this.movePosition(colum, offset);
       this.value[columIndex] = {
@@ -462,6 +483,58 @@ class ScrollPicker extends HTMLElement {
       styleRoot.appendChild(styleTemplate.content.cloneNode(true));
       document.querySelector("body").appendChild(styleRoot);
     }
+  }
+
+  aoolyTheme(options) {
+    const theme = document.querySelector("#scroll-picker-theme-container");
+    if (Boolean(theme)) {
+      theme.remove();
+    }
+
+    const styleRoot = document.createElement("div");
+    styleRoot.id = "scroll-picker-theme-container";
+    styleRoot.innerHTML = `
+    <style>
+    .scroll-picker-container {
+      background-color: 
+    }
+
+
+    .scroll-picker-panel {
+      background-color: 
+    }
+
+    .scroll-picker-panel-header {
+      border-bottom: 1px solid ${GRAY}; //
+    }
+
+    .scroll-picker-title {
+      color: 
+    }
+
+    .scroll-picker-cancel-btn {
+      color: ${GRAY}; //
+    }
+
+    .scroll-picker-confirm-btn {
+      color: ${YELLOW}; //
+    }
+
+    .scroll-picker-panel-content {
+        color: rgb(255, 255, 255);
+    }
+
+    .scroll-picker-center {
+      border: 1px solid ${YELLOW};
+    }
+
+    .scroll-picker-mask {
+      background: linear-gradient(rgb(45, 52, 61, .9), rgba(45, 52, 61, 0), rgb(45, 52, 61, .9));
+    }
+ 
+  </style>
+    `;
+    document.querySelector("body").appendChild(styleRoot);
   }
 
   destory() {
