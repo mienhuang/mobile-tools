@@ -4,15 +4,31 @@ const YELLOW = '#FFDF22';
 const DARK_GRAY = '#2D343D';
 const GRAY = '#99A6B5';
 const WHITE = '#fff';
+const BLACK = '#000';
 
 const DEFAULT_DARK_COLOR = {
-  containerBackground: 'rgba(45, 52, 61, .9)',
+  containerBackgroundColor: 'rgba(45, 52, 61, .9)',
   panelBackground: DARK_GRAY,
-  panelHeaderBorder: GRAY,
+  panelHeaderBorderColor: GRAY,
   titleColor: GRAY,
   confirmButtonColor: YELLOW,
   cancelButtonColor: GRAY,
-  textColor: WHITE
+  textColor: WHITE,
+  focusBorderColor: YELLOW,
+  maskBackgroundColor: 'rgb(45, 52, 61, .9)'
+
+};
+
+const DEFAULT_LIGHT_COLOR = {
+  containerBackgroundColor: 'rgba(210, 210, 210, .9)',
+  panelBackground: GRAY,
+  panelHeaderBorderColor: DARK_GRAY,
+  titleColor: DARK_GRAY,
+  confirmButtonColor: YELLOW,
+  cancelButtonColor: DARK_GRAY,
+  textColor: BLACK,
+  focusBorderColor: YELLOW,
+  maskBackgroundColor: 'rgb(200, 200, 200, .9)'
 };
 
 containerTemplate.innerHTML = `
@@ -71,7 +87,6 @@ styleTemplate.innerHTML = `
         justify-content: space-between;
         height: 40px;
         padding: 0 10px;
-        border-bottom: 1px solid ${GRAY}; //
     }
 
     .scroll-picker-title {
@@ -79,27 +94,11 @@ styleTemplate.innerHTML = `
       font-size: 18px;
     }
 
-    .scroll-picker-title-dark {
-      color: ${GRAY};
-    }
-
-    .scroll-picker-title-light {
-      color: ${GRAY};
-    }
-
     .scroll-picker-btn{
         outline: none;
         font-size: 16px;
         border: none;
         background: transparent;
-    }
-
-    .scroll-picker-cancel-btn {
-      color: ${GRAY}; //
-    }
-
-    .scroll-picker-confirm-btn {
-      color: ${YELLOW}; //
     }
 
     .scroll-picker-panel-content {
@@ -135,7 +134,6 @@ styleTemplate.innerHTML = `
       right: 0;
       bottom: 0;
       margin: auto;
-      border: 1px solid ${YELLOW};
     }
 
     .scroll-picker-mask {
@@ -146,7 +144,6 @@ styleTemplate.innerHTML = `
       height: ${PANEL_HEIGHT}px;
       opacity: .9;
       pointer-events: none;
-      background: linear-gradient(rgb(45, 52, 61, .9), rgba(45, 52, 61, 0), rgb(45, 52, 61, .9));
     }
  
   </style>
@@ -154,11 +151,11 @@ styleTemplate.innerHTML = `
 
 const pickerTemplate = document.createElement("template");
 pickerTemplate.innerHTML = `
-  <div class="scroll-picker-container scroll-picker-container-dark">
-    <div class="scroll-picker-panel scroll-picker-panel-drak">
+  <div class="scroll-picker-container">
+    <div class="scroll-picker-panel">
         <div class="scroll-picker-panel-header">
             <button class="scroll-picker-btn scroll-picker-cancel-btn">Cancel</button>
-            <div class="scroll-picker-title scroll-picker-title-dark"></div>
+            <div class="scroll-picker-title"></div>
             <button class="scroll-picker-btn scroll-picker-confirm-btn">Confirm</button>
         </div>
         <div class="scroll-picker-panel-content">
@@ -188,6 +185,7 @@ class ScrollPicker extends HTMLElement {
     this.offsetStep = 40;
     this.value = [];
     this.columData = [];
+    this._options = {};
 
     this._shadowRoot = this.attachShadow({ mode: "open" });
     this._shadowRoot.appendChild(containerTemplate.content.cloneNode(true));
@@ -229,8 +227,10 @@ class ScrollPicker extends HTMLElement {
   }
 
   set options(value) {
-    this.setTitle(value.title);
-    thhis.render(value.colum);
+    value.title && this.setTitle(value.title);
+    value.colum && this.render(value.colum);
+    this._options = value;
+    this.applyTheme(value);
   }
 
   get colums() {
@@ -254,10 +254,11 @@ class ScrollPicker extends HTMLElement {
         break;
 
       case "options":
-        const { colum, title } = JSON.parse(newVal);
-        this.columData = colum;
-        this.setTitle(title);
-        thhis.render(colum);
+        const value = JSON.parse(newVal);
+        this.columData = value.colum;
+        this.setTitle(value.title);
+        this.render(value.colum);
+        this._options = value;
         break;
       case "stopoverlaycancel":
         this.isOverlayStopCancel = Boolean(JSON.parse(newVal));
@@ -374,16 +375,18 @@ class ScrollPicker extends HTMLElement {
     this.moveEndY = parseInt(event.changedTouches[0].clientY);
     this.offsetSum = this.moveEndY - this.startY;
 
-    if (this.offsetSum == 0) {
+    // treat move distance small than 10 as click
+    if (Math.abs(this.offsetSum) <= 10) {
       const offset = event.target.targetOffset;
-      const index = event.target.index;
+      const _index = event.target.index;
       const columIndex = event.target.columIndex;
-      if (!Boolean(offset) || !Boolean(index > -1) || !Boolean(columIndex)) return;
+
+      if (!Boolean(offset) || !Boolean(_index > -1) || !Boolean(columIndex > -1)) return;
 
       this.movePosition(colum, offset);
       this.value[columIndex] = {
-        index,
-        value: this.columData[columIndex][index].value,
+        index: _index,
+        value: this.columData[columIndex][_index].value,
       };
 
       return;
@@ -411,7 +414,7 @@ class ScrollPicker extends HTMLElement {
 
       return;
     }
-
+    console.log({ currentPostion })
     const closeIndex = Math.round((90 - currentPostion) / 40);
     console.log(closeIndex, 'closeIndex', this.columData[index])
 
@@ -483,53 +486,56 @@ class ScrollPicker extends HTMLElement {
       styleRoot.appendChild(styleTemplate.content.cloneNode(true));
       document.querySelector("body").appendChild(styleRoot);
     }
+    this.applyTheme(this._options);
   }
 
-  aoolyTheme(options) {
+  applyTheme(options) {
     const theme = document.querySelector("#scroll-picker-theme-container");
     if (Boolean(theme)) {
       theme.remove();
     }
+
+    const defaultStyle = options.theme === 'dark' ? DEFAULT_DARK_COLOR : DEFAULT_LIGHT_COLOR;
 
     const styleRoot = document.createElement("div");
     styleRoot.id = "scroll-picker-theme-container";
     styleRoot.innerHTML = `
     <style>
     .scroll-picker-container {
-      background-color: 
+      background-color: ${options.containerBackgroundColor ? options.containerBackgroundColor : defaultStyle.containerBackgroundColor}
     }
 
 
     .scroll-picker-panel {
-      background-color: 
+      background-color: ${options.panelBackground ? options.panelBackground : defaultStyle.panelBackground}
     }
 
     .scroll-picker-panel-header {
-      border-bottom: 1px solid ${GRAY}; //
+      border-bottom: 1px solid ${options.panelHeaderBorderColor ? options.panelHeaderBorderColor : defaultStyle.panelHeaderBorderColor};
     }
 
     .scroll-picker-title {
-      color: 
+      color: ${options.titleColor ? options.titleColor : defaultStyle.titleColor}
     }
 
     .scroll-picker-cancel-btn {
-      color: ${GRAY}; //
+      color: ${options.cancelButtonColor ? options.cancelButtonColor : defaultStyle.cancelButtonColor};
     }
 
     .scroll-picker-confirm-btn {
-      color: ${YELLOW}; //
+      color: ${options.confirmButtonColor ? options.confirmButtonColor : defaultStyle.confirmButtonColor};
     }
 
     .scroll-picker-panel-content {
-        color: rgb(255, 255, 255);
+        color: ${options.textColor ? options.textColor : defaultStyle.textColor};
     }
 
     .scroll-picker-center {
-      border: 1px solid ${YELLOW};
+      border: 1px solid ${options.focusBorderColor ? options.focusBorderColor : defaultStyle.focusBorderColor};
     }
 
     .scroll-picker-mask {
-      background: linear-gradient(rgb(45, 52, 61, .9), rgba(45, 52, 61, 0), rgb(45, 52, 61, .9));
+      background: linear-gradient(${options.maskBackgroundColor ? options.maskBackgroundColor : defaultStyle.maskBackgroundColor}, rgba(45, 52, 61, 0), ${options.maskBackgroundColor ? options.maskBackgroundColor : defaultStyle.maskBackgroundColor});
     }
  
   </style>

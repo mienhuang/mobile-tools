@@ -31,6 +31,7 @@
       .addEventListener("change", (value) => console.log(value));
     console.log(document.querySelector("#test2"));
     const ele = document.querySelector("#test2");
+    const ele1 = document.querySelector("#test1");
     setTimeout(() => {
       ele.colums = [
         [
@@ -42,9 +43,17 @@
           ...(new Array(12).fill(1).map((v, i) => ({ id: `${i + 4}`, value: i + 1 })))
         ],
         [
-        ...(new Array(30).fill(1).map((v, i) => ({ id: `${i + 16}`, value: i + 1 })))
+          ...(new Array(30).fill(1).map((v, i) => ({ id: `${i + 16}`, value: i + 1 })))
         ],
       ];
+      ele.options = {
+        theme: 'dark',
+      }
+
+      ele1.options = {
+        theme: 'light'
+      }
+
     }, 2000);
   </script>
 </body>
