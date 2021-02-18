@@ -1,0 +1,25 @@
+{
+  "name": "@mienhuang/mobiletools",
+  "version": "0.0.1",
+  "description": "tools for mobile devices",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mienhuang/mobile-tools.git"
+  },
+  "keywords": [
+    "tools",
+    "mobile",
+    "scorll",
+    "picker"
+  ],
+  "author": "Mien",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mienhuang/mobile-tools/issues"
+  },
+  "homepage": "https://github.com/mienhuang/mobile-tools#readme"
+}
