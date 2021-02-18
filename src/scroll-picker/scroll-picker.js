@@ -176,6 +176,11 @@ class ScrollPicker extends HTMLElement {
     this.touchStart = this.touchStart.bind(this);
     this.touchMove = this.touchMove.bind(this);
     this.touchEnd = this.touchEnd.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
+    this._stopPropagation = this._stopPropagation.bind(this);
+    this.hide = this.hide.bind(this);
+    this.show = this.show.bind(this);
+    this._onOverlayClick = this._onOverlayClick.bind(this);
 
     this.isOverlayStopCancel = false;
     this.startY = 0;
@@ -193,7 +198,6 @@ class ScrollPicker extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log("connected");
     this.bindEvents();
     this.attachStyle();
   }
@@ -255,9 +259,8 @@ class ScrollPicker extends HTMLElement {
 
       case "options":
         const value = JSON.parse(newVal);
-        this.columData = value.colum;
         this.setTitle(value.title);
-        this.render(value.colum);
+        value.colum && this.render(value.colum);
         this._options = value;
         break;
       case "stopoverlaycancel":
@@ -274,11 +277,10 @@ class ScrollPicker extends HTMLElement {
   }
 
   render(colums) {
+    this.columData = colums;
     const container = this._pickerRoot.querySelector(
       ".scroll-picker-panel-content"
     );
-
-    console.log(colums, "cccccccccccc");
 
     colums.forEach((colum, index) => {
       const columRoot = document.createElement("div");
@@ -302,14 +304,14 @@ class ScrollPicker extends HTMLElement {
 
       this.value[index] = { index: 0, value: colum[0].value || null };
 
-      this.attachEvents(columRoot, index);
+      this.attachEvents2Colum(columRoot, index);
 
       container.appendChild(columRoot);
       this.movePosition(columRoot, 90);
     });
   }
 
-  attachEvents(colum, index) {
+  attachEvents2Colum(colum, index) {
     colum.addEventListener("touchstart", this.touchStart, false);
     colum.addEventListener(
       "touchend",
@@ -326,35 +328,32 @@ class ScrollPicker extends HTMLElement {
       false
     );
 
-    // if (this.isPC) {
-    //   //如果是PC端则再增加拖拽监听 方便调试
-    //   theWheel.addEventListener(
-    //     "mousedown",
-    //     function () {
-    //       this.dragClick(event, this.firstChild, index);
-    //     },
-    //     false
-    //   );
-    //   theWheel.addEventListener(
-    //     "mousemove",
-    //     function () {
-    //       this.dragClick(event, this.firstChild, index);
-    //     },
-    //     false
-    //   );
-    //   theWheel.addEventListener(
-    //     "mouseup",
-    //     function () {
-    //       this.dragClick(event, this.firstChild, index);
-    //     },
-    //     true
-    //   );
-    // }
+    colum.addEventListener("mousedown", this.touchStart, false);
+    colum.addEventListener(
+      "mouseup",
+      (event) => {
+        this.touchEnd(event, index, colum);
+      },
+      false
+    );
+    colum.addEventListener(
+      "mousemove",
+      (event) => {
+        this.touchMove(event, index, colum);
+      },
+      false
+    );
+
+    document.addEventListener('mouseup', this.onMouseUp, false)
   }
 
-  touchStart(event, index) {
+  onMouseUp() {
+    this.isMoving = false;
+  }
+
+  touchStart(event) {
     this.isMoving = true;
-    this.startY = parseInt(event.touches[0].clientY);
+    this.startY = parseInt(event.touches && event.touches[0] ? event.touches[0].clientY : event.clientY);
     this.originalY = this.startY;
   }
 
@@ -362,7 +361,7 @@ class ScrollPicker extends HTMLElement {
     if (!this.isMoving) return;
 
     event.preventDefault();
-    this.moveY = event.touches[0].clientY;
+    this.moveY = parseInt(event.touches && event.touches[0] ? event.touches[0].clientY : event.clientY);
     this.offset = this.moveY - this.originalY;
 
     this.curDistance[index] = this.getCurrentDistance(colum) + this.offset;
@@ -372,9 +371,12 @@ class ScrollPicker extends HTMLElement {
 
   touchEnd(event, index, colum) {
     this.isMoving = false;
-    this.moveEndY = parseInt(event.changedTouches[0].clientY);
+    this.moveEndY = parseInt(event.touches && event.touches[0] ? event.touches[0].clientY : event.clientY || this.startY);
     this.offsetSum = this.moveEndY - this.startY;
+    this.calculateMoveDistance(event, index, colum);
+  }
 
+  calculateMoveDistance(event, index, colum) {
     // treat move distance small than 10 as click
     if (Math.abs(this.offsetSum) <= 10) {
       const offset = event.target.targetOffset;
@@ -414,17 +416,13 @@ class ScrollPicker extends HTMLElement {
 
       return;
     }
-    console.log({ currentPostion })
     const closeIndex = Math.round((90 - currentPostion) / 40);
-    console.log(closeIndex, 'closeIndex', this.columData[index])
 
     this.movePosition(colum, 90 - closeIndex * 40);
     this.value[index] = {
       index: closeIndex,
       value: this.columData[index][closeIndex].value,
     };
-
-    console.log(this.value, "this.valuethis.value");
   }
 
   movePosition(colum, distance) {
@@ -442,15 +440,11 @@ class ScrollPicker extends HTMLElement {
   bindEvents() {
     this._pickerRoot
       .querySelector(".scroll-picker-panel")
-      .addEventListener("click", (event) => {
-        event.stopPropagation();
-      });
+      .addEventListener("click", this._stopPropagation);
 
     this._pickerRoot
       .querySelector(".scroll-picker-cancel-btn")
-      .addEventListener("click", () => {
-        this.hide();
-      });
+      .addEventListener("click", this.hide);
 
     this._pickerRoot
       .querySelector(".scroll-picker-confirm-btn")
@@ -458,15 +452,39 @@ class ScrollPicker extends HTMLElement {
 
     this._shadowRoot
       .querySelector(".scroll-picker-trigger")
-      .addEventListener("click", () => {
-        this.show();
-      });
+      .addEventListener("click", this.show);
 
-    this.picker.addEventListener("click", () => {
-      if (this.isOverlayStopCancel) return;
+    this.picker.addEventListener("click", this._onOverlayClick);
+  }
 
-      this.hide();
-    });
+  unbindEvents() {
+    this._pickerRoot
+      .querySelector(".scroll-picker-panel")
+      .removeEventListener("click", this._stopPropagation);
+
+    this._pickerRoot
+      .querySelector(".scroll-picker-cancel-btn")
+      .removeEventListener("click", this.hide);
+
+    this._pickerRoot
+      .querySelector(".scroll-picker-confirm-btn")
+      .removeEventListener("click", this.onSelected);
+
+    this._shadowRoot
+      .querySelector(".scroll-picker-trigger")
+      .removeEventListener("click", this.show);
+
+    this.picker.removeEventListener("click", this._onOverlayClick);
+  }
+
+  _onOverlayClick() {
+    if (this.isOverlayStopCancel) return;
+
+    this.hide();
+  }
+
+  _stopPropagation(event) {
+    event.stopPropagation();
   }
 
   onSelected() {
@@ -544,6 +562,7 @@ class ScrollPicker extends HTMLElement {
   }
 
   destory() {
+    this.unbindEvents();
     this._pickerRoot.remove();
   }
 }
