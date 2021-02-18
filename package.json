@@ -1,10 +1,11 @@
 {
-  "name": "@mienhuang/mobiletools",
+  "name": "@mobiletools/scrollpicker",
   "version": "0.0.1",
   "description": "tools for mobile devices",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "mini": "minify src/scroll-picker"
   },
   "repository": {
     "type": "git",
