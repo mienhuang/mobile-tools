@@ -12,26 +12,17 @@
 
 <body>
   <h1>Scroll Picker Demo</h1>
-  <scroll-picker id="test1" title="ceshji">
-    <button>Click</button>
+  <scroll-picker id="test1" title="选择星期">
+    <button>星期选择</button>
   </scroll-picker>
   <scroll-picker id="test2" title="选择日期" stopoverlaycancel="true">
-    <button>Click2</button>
+    <button>日期选择</button>
   </scroll-picker>
 
-  <button id="remove">remove</button>
-
   <script>
-    document.querySelector('#remove').addEventListener('click', () => {
-      document.querySelector("#test2").destory();
-    })
-
-    document
-      .querySelector("#test2")
-      .addEventListener("change", (value) => console.log(value));
-    console.log(document.querySelector("#test2"));
     const ele = document.querySelector("#test2");
     const ele1 = document.querySelector("#test1");
+
     setTimeout(() => {
       ele.colums = [
         [
@@ -50,9 +41,17 @@
         theme: 'dark',
       }
 
-      ele1.options = {
-        theme: 'light'
-      }
+      ele1.colums = [
+        [
+          { id: "1", value: "星期一" },
+          { id: "2", value: "星期二" },
+          { id: "3", value: "星期三" },
+          { id: "4", value: "星期四" },
+          { id: "5", value: "星期五" },
+          { id: "6", value: "星期六" },
+          { id: "7", value: "星期日" },
+        ]
+      ];
 
     }, 2000);
   </script>
