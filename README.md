@@ -84,7 +84,6 @@ After install from NPM but you still need import scroll-picker.js file to your p
 
 <script>
     const ele = document.querySelector("#test2");
-    const ele1 = document.querySelector("#test1");
 
     setTimeout(() => {
       ele.colums = [
@@ -103,18 +102,6 @@ After install from NPM but you still need import scroll-picker.js file to your p
       ele.options = {
         theme: 'dark',
       }
-
-      ele1.colums = [
-        [
-          { id: "1", value: "星期一" },
-          { id: "2", value: "星期二" },
-          { id: "3", value: "星期三" },
-          { id: "4", value: "星期四" },
-          { id: "5", value: "星期五" },
-          { id: "6", value: "星期六" },
-          { id: "7", value: "星期日" },
-        ]
-      ];
 
     }, 2000);
 </script>
