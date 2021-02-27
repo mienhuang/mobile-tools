@@ -151,6 +151,6 @@ After install from NPM but you still need import scroll-picker.js file to your p
 
 ## License
 
-[MIT LICENSE](https://github.com/onlyhom/mobileSelect.js/blob/master/LICENSE)
+[MIT LICENSE](https://github.com/mienhuang/scrollpicker/blob/main/LICENSE)
 
-Copyright (c) 2021-present, LIHONG OU(onlyhom)
+Copyright (c) 2021-present, Mien
