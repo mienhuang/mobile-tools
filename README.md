@@ -51,7 +51,7 @@ After install from NPM but you still need import scroll-picker.js file to your p
 #### Single colum demo
 
 ```html
-<scroll-picker id="test1" title="选择星期">
+<scroll-picker id="test1" title="Day">
     <button>星期选择</button>
 </scroll-picker>
 
@@ -61,13 +61,13 @@ After install from NPM but you still need import scroll-picker.js file to your p
     setTimeout(() => {
       ele1.colums = [
         [
-          { id: "1", value: "星期一" },
-          { id: "2", value: "星期二" },
-          { id: "3", value: "星期三" },
-          { id: "4", value: "星期四" },
-          { id: "5", value: "星期五" },
-          { id: "6", value: "星期六" },
-          { id: "7", value: "星期日" },
+          { id: "1", value: "Sunday" },
+          { id: "2", value: "Monday" },
+          { id: "3", value: "Tuesday" },
+          { id: "4", value: "Wensday" },
+          { id: "5", value: "Thursday" },
+          { id: "6", value: "Friday" },
+          { id: "7", value: "Saturday" },
         ]
       ];
 
