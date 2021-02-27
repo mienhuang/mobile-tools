@@ -1,6 +1,6 @@
 {
   "name": "@mobiletools/scrollpicker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "tools for mobile devices",
   "main": "index.js",
   "scripts": {
