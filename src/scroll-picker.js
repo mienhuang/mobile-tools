@@ -191,6 +191,8 @@ class ScrollPicker extends HTMLElement {
     this.value = [];
     this.columData = [];
     this._options = {};
+    this._cancelText = 'Cancel';
+    this._confirmText = 'Confirm';
 
     this._shadowRoot = this.attachShadow({ mode: "open" });
     this._shadowRoot.appendChild(containerTemplate.content.cloneNode(true));
@@ -219,7 +221,7 @@ class ScrollPicker extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["title", "colums", "options", "stopoverlaycancel"];
+    return ["title", "colums", "options", "stopoverlaycancel", "cancelText", "confirmText"];
   }
 
   set title(value) {
@@ -246,6 +248,24 @@ class ScrollPicker extends HTMLElement {
     this.render(value);
   }
 
+  get confirmText() {
+    return this._confirmText;
+  }
+
+  set confirmText(value) {
+    this._confirmText = value;
+    this.updateConfirmText(value);
+  }
+
+  get cancelText() {
+    return this._cancelText;
+  }
+
+  set cancelText(value) {
+    this._cancelText = value;
+    this.updateCancelText(value);
+  }
+
   attributeChangedCallback(name, oldVal, newVal) {
     switch (name) {
       case "title":
@@ -266,7 +286,14 @@ class ScrollPicker extends HTMLElement {
       case "stopoverlaycancel":
         this.isOverlayStopCancel = Boolean(JSON.parse(newVal));
         break;
-
+      case "confirmText":
+        this._confirmText = newVal;
+        this.updateConfirmText(newVal);
+        break;
+      case "cancelText":
+        this._cancelText = newVal;
+        this.updateCancelText(newVal);
+        break;
       default:
         break;
     }
@@ -274,6 +301,14 @@ class ScrollPicker extends HTMLElement {
 
   setTitle(title) {
     this._pickerRoot.querySelector(".scroll-picker-title").innerHTML = title;
+  }
+
+  updateCancelText(text) {
+    this._pickerRoot.querySelector('.scroll-picker-cancel-btn').innerHTML = text;
+  }
+
+  updateConfirmText(text) {
+    this._pickerRoot.querySelector('.scroll-picker-confirm-btn').innerHTML = text;
   }
 
   render(colums) {

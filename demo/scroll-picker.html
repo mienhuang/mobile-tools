@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Scroll Picker Demo</title>
-  <script src="../dist/scroll-picker.min.js" defer></script>
+  <!-- <script src="../dist/scroll-picker.min.js" defer></script> -->
+  <script src="../src/scroll-picker.js" defer></script>
   <meta charset="utf-8" />
   <base href="/" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
@@ -15,7 +16,7 @@
   <scroll-picker id="test1" title="选择星期">
     <button>星期选择</button>
   </scroll-picker>
-  <scroll-picker id="test2" title="选择日期" stopoverlaycancel="true">
+  <scroll-picker id="test2" title="选择日期" stopoverlaycancel="true" confirmText="queRen" cancelText="quXiao">
     <button>日期选择</button>
   </scroll-picker>
 
@@ -52,6 +53,9 @@
           { id: "7", value: "星期日" },
         ]
       ];
+
+      ele1.cancelText = 'quxiao';
+      ele1.confirmText = 'queren';
 
     }, 2000);
   </script>
