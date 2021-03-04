@@ -52,7 +52,7 @@ After install from NPM but you still need import scroll-picker.js file to your p
 
 ```html
 <scroll-picker id="test1" title="Day">
-    <button>星期选择</button>
+    <button>day picker</button>
 </scroll-picker>
 
 <script>
@@ -79,7 +79,7 @@ After install from NPM but you still need import scroll-picker.js file to your p
 
 ```html
 <scroll-picker id="test2" title="选择日期" stopoverlaycancel="true">
-    <button>日期选择</button>
+    <button>date picker</button>
 </scroll-picker>
 
 <script>
@@ -101,6 +101,8 @@ After install from NPM but you still need import scroll-picker.js file to your p
       ];
       ele.options = {
         theme: 'dark',
+        confirmText: 'Confirm',
+        cancelText: 'Cancel'
       }
 
     }, 2000);
@@ -116,6 +118,9 @@ After install from NPM but you still need import scroll-picker.js file to your p
 | stopoverlaycancel           | false                 | Boolean | The flag control the scroll picker over close the current scroll picker or not                                                                                                                                                                                |
 | options      | No default value                 | Object | The options to help setup the scroll picker, can configure title, colums and style                                                                                                                                                                         |
 | theme             | dark                  | String | The settings for the scroll picker theme, can choose light or dark                                                                                                                                                           |
+| cancelText             | Cancel                  | String | The text display on the cancel button                                                                                                                                                         |
+| confirmText             | Confirm                  | String | The text display on the confirm button                                                                                                                                                         |
+
 
 
 ## Options
@@ -133,8 +138,45 @@ After install from NPM but you still need import scroll-picker.js file to your p
 | cancelButtonColor      | dark: '#99A6B5', light: '#2D343D'                                   | String   | color for the cancel button text                                                                                                                                                                                                                           |
 | focusBorderColor      | '#FFDF22'                                    | String   | color for the center focus rectangle                                                                                                                                                                                                                              |
 | maskBackgroundColor     | dark: 'rgb(45, 52, 61, .9)', light: 'rgb(200, 200, 200, .9)'                                 | String   | color for the mask background color                                                                                                                                                                                                                            |
+| cancelText             | Cancel                  | String | The text display on the cancel button                                                                                                                                                         |
+| confirmText             | Confirm                  | String | The text display on the confirm button                                                                                                                                                         |
 
+### Tips
 
+> For some of the options you can set the value on the tag, eg:
+
+```html
+<scroll-picker id="test2" title="select date"></scroll-picker>
+```
+
+> also you can set the value to the attribute, eg:
+
+```javascript
+
+  const ele = document.querySelector("#test2");
+
+  setTimeout(() => {
+    ele.title = 'date picker';
+    }, 2000);
+```
+
+> and you can set it in the options, eg:
+
+```javascript
+
+  const ele = document.querySelector("#test2");
+
+  setTimeout(() => {
+    ele.options = {
+      title: 'date picker'
+    };
+    }, 2000);
+```
+
+> All the configration can be setted by the options, Or by setting on the attribute.
+
+> Only title, stopoverlaycancel, options, colums can be setted on the Tag.
+> but for the **options And colums** we don't suggest you set it in this way.
 
 ## License
 

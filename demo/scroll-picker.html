@@ -16,7 +16,7 @@
   <scroll-picker id="test1" title="选择星期">
     <button>星期选择</button>
   </scroll-picker>
-  <scroll-picker id="test2" title="选择日期" stopoverlaycancel="true" confirmText="queRen" cancelText="quXiao">
+  <scroll-picker id="test2" title="选择日期" stopoverlaycancel="true">
     <button>日期选择</button>
   </scroll-picker>
 
@@ -40,7 +40,9 @@
       ];
       ele.options = {
         theme: 'dark',
-      }
+        confirmText: 'confirm',
+        cancelText: 'cancel'
+      };
 
       ele1.colums = [
         [
@@ -54,8 +56,8 @@
         ]
       ];
 
-      ele1.cancelText = 'quxiao';
-      ele1.confirmText = 'queren';
+      ele1.cancelText = '取消';
+      ele1.confirmText = '确认';
 
     }, 2000);
   </script>
