@@ -146,8 +146,7 @@ styleTemplate.innerHTML = `
       pointer-events: none;
     }
  
-  </style>
-`;
+  </style>`;
 
 const pickerTemplate = document.createElement("template");
 pickerTemplate.innerHTML = `
@@ -587,8 +586,8 @@ class ScrollPicker extends HTMLElement {
       background: linear-gradient(${options.maskBackgroundColor ? options.maskBackgroundColor : defaultStyle.maskBackgroundColor}, rgba(45, 52, 61, 0), ${options.maskBackgroundColor ? options.maskBackgroundColor : defaultStyle.maskBackgroundColor});
     }
  
-  </style>
-    `;
+  </style>`;
+
     document.querySelector("body").appendChild(styleRoot);
   }
 
