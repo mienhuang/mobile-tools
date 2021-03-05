@@ -104,7 +104,7 @@ styleTemplate.innerHTML = `
     .scroll-picker-panel-content {
         flex: 1;
         display: flex;
-        color: rgb(255, 255, 255); //
+        color: rgb(255, 255, 255);
         background-color: transparent;
         overflow: hidden;
         z-index: 2;
@@ -220,7 +220,7 @@ class ScrollPicker extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["title", "colums", "options", "stopoverlaycancel", "cancelText", "confirmText"];
+    return ["title", "colums", "options", "stopoverlaycancel"];
   }
 
   set title(value) {
