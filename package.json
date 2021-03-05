@@ -1,6 +1,6 @@
 {
   "name": "@mobiletools/scrollpicker",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "tools for mobile devices",
   "main": "index.js",
   "scripts": {
@@ -24,8 +24,7 @@
     "url": "https://github.com/mienhuang/mobile-tools/issues"
   },
   "homepage": "https://github.com/mienhuang/mobile-tools#readme",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "uglify-js": "^3.13.0"
   }
