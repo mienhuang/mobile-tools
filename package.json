@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "publish": "npm publish --access=public",
+    "publish": "npm run uglify && npm publish --access=public",
     "uglify": "uglifyjs src/scroll-picker.js -c -m -o dist/scroll-picker.min.js"
   },
   "repository": {
@@ -24,8 +24,9 @@
     "url": "https://github.com/mienhuang/mobile-tools/issues"
   },
   "homepage": "https://github.com/mienhuang/mobile-tools#readme",
-  "devDependencies": {},
-  "dependencies": {
+  "devDependencies": {
     "uglify-js": "^3.13.0"
+  },
+  "dependencies": {
   }
 }

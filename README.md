@@ -1,10 +1,10 @@
 <h1 align="center" >Scroll Picker</h1>
 <p align="center">
-  <a href="https://github.com/onlyhom/mobileSelect.js/blob/master/LICENSE" title="LICENSE">
+  <a href="https://github.com/mienhuang/scrollpicker/blob/master/LICENSE" title="LICENSE">
     <img src="https://img.shields.io/npm/l/express.svg" alt="MIT License">
   </a>
   <a href="" title="downloads">
-    <img src="https://img.shields.io/badge/downloads-192-green.svg" alt="downloads">
+    <img src="https://img.shields.io/badge/downloads-209-green.svg" alt="downloads">
   </a>
   <a href="" title="dependencies">
     <img src="https://img.shields.io/badge/dependencies-none-orange.svg" alt="dependencies">
